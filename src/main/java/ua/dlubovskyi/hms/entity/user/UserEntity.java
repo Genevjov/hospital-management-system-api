@@ -1,4 +1,4 @@
-package ua.dlubovskyi.hms.bean;
+package ua.dlubovskyi.hms.entity.user;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -6,15 +6,15 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * Base user entity for hierarchy.
  */
-public class User {
+public class UserEntity {
 
     private String userId;
     private String fullName;
 
-    public User() {
+    public UserEntity() {
     }
 
-    public User(String userId, String fullName) {
+    public UserEntity(String userId, String fullName) {
         this.userId = userId;
         this.fullName = fullName;
     }
@@ -39,10 +39,10 @@ public class User {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
+        UserEntity userEntity = (UserEntity) o;
         return new EqualsBuilder()
-                .append(this.getUserId(), user.getUserId())
-                .append(this.getFullName(), user.getFullName()).build();
+                .append(this.getUserId(), userEntity.getUserId())
+                .append(this.getFullName(), userEntity.getFullName()).build();
     }
 
     @Override

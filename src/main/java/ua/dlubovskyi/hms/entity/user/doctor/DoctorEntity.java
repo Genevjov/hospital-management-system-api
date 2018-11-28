@@ -1,15 +1,15 @@
-package ua.dlubovskyi.hms.bean;
+package ua.dlubovskyi.hms.entity.user.doctor;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import ua.dlubovskyi.hms.entity.user.UserEntity;
 
 /**
  * DoctorEntity entity that needed for main logic of application.
  */
-public class DoctorEntity extends User {
+public class DoctorEntity extends UserEntity {
 
     private String specializationId;
-    private String departmentId;
 
     public DoctorEntity() {
     }
@@ -18,10 +18,9 @@ public class DoctorEntity extends User {
         super(userId, fullName);
     }
 
-    public DoctorEntity(String userId, String fullName, String specializationId, String departmentId) {
+    public DoctorEntity(String userId, String fullName, String specializationId) {
         super(userId, fullName);
         this.specializationId = specializationId;
-        this.departmentId = departmentId;
     }
 
     public String getSpecializationId() {
@@ -30,14 +29,6 @@ public class DoctorEntity extends User {
 
     public void setSpecializationId(String specializationId) {
         this.specializationId = specializationId;
-    }
-
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
     }
 
     @Override
@@ -49,7 +40,6 @@ public class DoctorEntity extends User {
         return new EqualsBuilder()
                 .append(this.getUserId(), doctorEntity.getUserId())
                 .append(this.getFullName(), doctorEntity.getFullName())
-                .append(this.getDepartmentId(), doctorEntity.getDepartmentId())
                 .append(this.specializationId, doctorEntity.getSpecializationId()).build();
     }
 
@@ -58,7 +48,6 @@ public class DoctorEntity extends User {
         return new HashCodeBuilder(17, 37)
                 .append(this.getUserId())
                 .append(this.getFullName())
-                .append(this.getDepartmentId())
                 .append(this.specializationId).build();
     }
 }

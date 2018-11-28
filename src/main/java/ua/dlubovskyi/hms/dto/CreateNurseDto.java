@@ -1,6 +1,6 @@
 package ua.dlubovskyi.hms.dto;
 
-public class NurseDto {
+public class CreateNurseDto {
 
     private String fullName;
     private String departmentId;

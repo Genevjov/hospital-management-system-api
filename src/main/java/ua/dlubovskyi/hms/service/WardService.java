@@ -5,5 +5,5 @@ import org.springframework.stereotype.Service;
 
 @Component
 @Service
-public interface AppartamentService {
+public interface WardService {
 }

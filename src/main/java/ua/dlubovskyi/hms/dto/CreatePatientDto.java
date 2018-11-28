@@ -1,4 +1,4 @@
 package ua.dlubovskyi.hms.dto;
 
-public class DoctorDto {
+public class CreatePatientDto {
 }

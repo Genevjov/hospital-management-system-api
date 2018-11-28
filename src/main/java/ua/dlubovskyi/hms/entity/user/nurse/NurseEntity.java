@@ -1,32 +1,30 @@
-package ua.dlubovskyi.hms.bean;
+package ua.dlubovskyi.hms.entity.user.nurse;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import ua.dlubovskyi.hms.entity.user.UserEntity;
 
 /**
  * NurseEntity entity than needed for main logic of application.
  */
-public class NurseEntity extends User {
+public class NurseEntity extends UserEntity {
 
-    private String departmentId;
+    private NurseType nurseType;
+
     public NurseEntity() {
     }
 
-    public NurseEntity(String departmentId) {
-        this.departmentId = departmentId;
-    }
-
-    public NurseEntity(String userId, String fullName, String departmentId) {
+    public NurseEntity(String userId, String fullName, NurseType nurseType) {
         super(userId, fullName);
-        this.departmentId = departmentId;
+        this.nurseType = nurseType;
     }
 
-    public String getDepartmentId() {
-        return departmentId;
+    public NurseType getNurseType() {
+        return nurseType;
     }
 
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setNurseType(NurseType nurseType) {
+        this.nurseType = nurseType;
     }
 
     @Override
@@ -38,7 +36,8 @@ public class NurseEntity extends User {
         return new EqualsBuilder()
                 .append(this.getUserId(), nurseEntity.getUserId())
                 .append(this.getFullName(), nurseEntity.getFullName())
-                .append(this.getDepartmentId(), nurseEntity.getDepartmentId()).build();
+                .append(this.getNurseType(), nurseEntity.getNurseType())
+                .build();
     }
 
     @Override
@@ -46,6 +45,7 @@ public class NurseEntity extends User {
         return new HashCodeBuilder(17, 37)
                 .append(this.getUserId())
                 .append(this.getFullName())
-                .append(this.getDepartmentId()).build();
+                .append(this.getNurseType())
+                .build();
     }
 }
