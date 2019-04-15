@@ -49,7 +49,7 @@ public class PatientEntity extends User {
         PatientEntity patientEntity = (PatientEntity) o;
         return new EqualsBuilder()
                 .append(this.getUserId(), patientEntity.getUserId())
-                .append(this.getFullName(), patientEntity.getFullName())
+                .append(this.getFirstName(), patientEntity.getFirstName())
                 .append(this.getDepartmentId(), patientEntity.getDepartmentId())
                 .append(this.doctorId, patientEntity.getDoctorId()).build();
     }
@@ -58,7 +58,7 @@ public class PatientEntity extends User {
     public int hashCode() {
         return new HashCodeBuilder()
                 .append(this.getUserId())
-                .append(this.getFullName())
+                .append(this.getFirstName())
                 .append(this.getDepartmentId())
                 .append(this.getDoctorId()).build();
     }

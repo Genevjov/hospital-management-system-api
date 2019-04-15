@@ -12,7 +12,7 @@ public class NurserService implements NurseService {
     @Override
     public List<User> select() {
         List<User> nurses= new ArrayList<>();
-        nurses.add(new User("111"," LOL", UserRole.NURSE));
+        nurses.add(new User("111"," LOL"));
         return nurses;
     }
 }

@@ -37,7 +37,7 @@ public class NurseEntity extends User {
         NurseEntity nurseEntity = (NurseEntity) o;
         return new EqualsBuilder()
                 .append(this.getUserId(), nurseEntity.getUserId())
-                .append(this.getFullName(), nurseEntity.getFullName())
+                .append(this.getFirstName(), nurseEntity.getFirstName())
                 .append(this.getDepartmentId(), nurseEntity.getDepartmentId()).build();
     }
 
@@ -45,7 +45,7 @@ public class NurseEntity extends User {
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
                 .append(this.getUserId())
-                .append(this.getFullName())
+                .append(this.getFirstName())
                 .append(this.getDepartmentId()).build();
     }
 }
