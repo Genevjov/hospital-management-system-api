@@ -24,6 +24,6 @@ public class DoctorRest {
      */
     @GetMapping("/doctors")
     public User getAllDoctors() {
-        return userService.findById("a");
+        return userService.findById("e87ac28e-6ea5-4acc-aba2-ab046f2d485e");
     }
 }
