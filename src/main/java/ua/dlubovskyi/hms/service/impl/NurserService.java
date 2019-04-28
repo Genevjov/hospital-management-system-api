@@ -1,7 +1,7 @@
 package ua.dlubovskyi.hms.service.impl;
 
 import org.springframework.stereotype.Service;
-import ua.dlubovskyi.hms.bean.User;
+import ua.dlubovskyi.hms.entity.User;
 import ua.dlubovskyi.hms.service.NurseService;
 
 import java.util.ArrayList;

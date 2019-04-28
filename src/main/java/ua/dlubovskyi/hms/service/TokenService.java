@@ -1,11 +1,16 @@
 package ua.dlubovskyi.hms.service;
 
-import java.util.UUID;
+import org.springframework.stereotype.Service;
+import ua.dlubovskyi.hms.entity.AuthToken;
 
+@Service
 public interface TokenService {
 
-    boolean isTokenValid(UUID token);
+    boolean isTokenValid(String token);
 
-    void invalidateToken(UUID token);
+    void invalidateToken(String token);
 
+    AuthToken generateAuthTokenForUser(String userId);
+
+    void updateToken(String userId);
 }

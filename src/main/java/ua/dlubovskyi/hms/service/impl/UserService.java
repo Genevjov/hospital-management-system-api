@@ -1,8 +1,7 @@
 package ua.dlubovskyi.hms.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import ua.dlubovskyi.hms.bean.User;
+import ua.dlubovskyi.hms.entity.User;
 import ua.dlubovskyi.hms.repository.UserRepository;
 
 import javax.persistence.EntityManager;
@@ -15,12 +14,12 @@ import java.util.List;
 @Service
 public class UserService {
 
-    @Autowired
-    EntityManager entityManager;
-    @Autowired
-    private UserRepository userRepository;
+    private final EntityManager entityManager;
+    private final UserRepository userRepository;
 
-    public UserService() {
+    public UserService(EntityManager entityManager, UserRepository userRepository) {
+        this.entityManager = entityManager;
+        this.userRepository = userRepository;
     }
 
     public User findById(String id) {
