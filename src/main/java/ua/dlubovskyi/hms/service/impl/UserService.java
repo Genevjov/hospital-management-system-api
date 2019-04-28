@@ -23,7 +23,7 @@ public class UserService {
     }
 
     public User findById(String id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElse(null);
     }
 
     public User findUserByEmailAndPass(String email, String password) {

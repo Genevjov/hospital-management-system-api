@@ -13,4 +13,6 @@ public interface TokenService {
     AuthToken generateAuthTokenForUser(String userId);
 
     void updateToken(String userId);
+
+    String getUserIdByToken(String token);
 }

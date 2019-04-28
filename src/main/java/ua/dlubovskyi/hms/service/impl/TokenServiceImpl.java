@@ -7,14 +7,13 @@ import ua.dlubovskyi.hms.repository.TokenRepository;
 import ua.dlubovskyi.hms.service.TokenService;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaUpdate;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
+
+import static java.util.Objects.nonNull;
 
 @Service
 public class TokenServiceImpl implements TokenService {
@@ -69,5 +68,19 @@ public class TokenServiceImpl implements TokenService {
         criteriaUpdate.set("expirationDate", DateUtils.addMinutes(new Date(), 30));
         criteriaUpdate.where(userPredicate);
         entityManager.createQuery(criteriaUpdate).executeUpdate();
+    }
+
+    @Override
+    public String getUserIdByToken(String token) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<AuthToken> criteriaQuery = criteriaBuilder.createQuery(AuthToken.class);
+        Root<AuthToken> authTokenRoot = criteriaQuery.from(AuthToken.class);
+        Predicate tokenPredicate = criteriaBuilder.equal(authTokenRoot.get("token"), token);
+        criteriaQuery.where(tokenPredicate);
+        AuthToken authToken = entityManager.createQuery(criteriaQuery).getSingleResult();
+        if (nonNull(authToken)) {
+            return authToken.getUserId();
+        }
+        return null;
     }
 }

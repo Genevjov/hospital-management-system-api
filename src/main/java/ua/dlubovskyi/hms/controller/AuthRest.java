@@ -5,10 +5,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import ua.dlubovskyi.hms.dto.auth.LogoutDto;
 import ua.dlubovskyi.hms.dto.auth.AuthUserDto;
+import ua.dlubovskyi.hms.dto.auth.LogoutDto;
 import ua.dlubovskyi.hms.entity.AuthToken;
 import ua.dlubovskyi.hms.entity.User;
+import ua.dlubovskyi.hms.security.PasswordEncoder;
 import ua.dlubovskyi.hms.service.TokenService;
 import ua.dlubovskyi.hms.service.impl.UserService;
 
@@ -19,15 +20,18 @@ public class AuthRest {
 
     private final UserService userService;
     private TokenService tokenService;
+    private PasswordEncoder passwordEncoder;
 
-    public AuthRest(UserService userService, TokenService tokenService) {
+    public AuthRest(UserService userService, TokenService tokenService, PasswordEncoder passwordEncoder) {
         this.userService = userService;
         this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/auth")
     public ResponseEntity<AuthToken> authUser(@RequestBody AuthUserDto authUserDto) {
-        User user = userService.findUserByEmailAndPass(authUserDto.getEmail(), authUserDto.getPassword());
+        String encodedPassword = passwordEncoder.encode(authUserDto.getPassword());
+        User user = userService.findUserByEmailAndPass(authUserDto.getEmail(), encodedPassword);
         if (nonNull(user)) {
             AuthToken authToken = tokenService.generateAuthTokenForUser(user.getUserId());
             return new ResponseEntity<>(authToken, HttpStatus.OK);

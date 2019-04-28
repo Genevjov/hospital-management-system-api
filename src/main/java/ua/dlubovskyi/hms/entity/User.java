@@ -1,13 +1,11 @@
 package ua.dlubovskyi.hms.entity;
 
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import java.util.Objects;
 
-import javax.persistence.*;
-
-/**
- * Base user entity for hierarchy.
- */
 @Entity
 @Table(name = "users", schema = "hms_api_db")
 public class User {
@@ -24,19 +22,11 @@ public class User {
     @Column(name = "email")
     private String email;
     @Column(name = "password")
-    private  String password;
+    private String password;
     @Column(name = "country_code")
     private String countryCode;
-    @Column(name = "profile_type_id")
-    private String profileTypeId;
-
-    public User() {
-    }
-
-    public User(String userId, String firstName) {
-        this.userId = userId;
-        this.firstName = firstName;
-    }
+    @Column(name = "profile_type")
+    private String profileType;
 
     public String getUserId() {
         return userId;
@@ -94,12 +84,12 @@ public class User {
         this.countryCode = countryCode;
     }
 
-    public String getProfileTypeId() {
-        return profileTypeId;
+    public String getProfileType() {
+        return profileType;
     }
 
-    public void setProfileTypeId(String profileTypeId) {
-        this.profileTypeId = profileTypeId;
+    public void setProfileType(String profileType) {
+        this.profileType = profileType;
     }
 
     @Override
@@ -107,15 +97,18 @@ public class User {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return new EqualsBuilder()
-                .append(this.getUserId(), user.getUserId())
-                .append(this.getFirstName(), user.getFirstName()).build();
+        return Objects.equals(userId, user.userId) &&
+                Objects.equals(firstName, user.firstName) &&
+                Objects.equals(secondName, user.secondName) &&
+                Objects.equals(phone, user.phone) &&
+                Objects.equals(email, user.email) &&
+                Objects.equals(password, user.password) &&
+                Objects.equals(countryCode, user.countryCode) &&
+                Objects.equals(profileType, user.profileType);
     }
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37)
-                .append(this.getUserId())
-                .append(this.firstName).build();
+        return Objects.hash(userId, firstName, secondName, phone, email, password, countryCode, profileType);
     }
 }

@@ -6,7 +6,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 /**
  * NurseEntity entity than needed for main logic of application.
  */
-public class NurseEntity extends User {
+public class NurseEntity   {
 
     private String departmentId;
     private String hospitalId;
