@@ -9,12 +9,8 @@ public class DoctorEntity {
     @Id
     @Column(name = "doctor_id")
     private String doctorId;
-    @Column(name = "hospitalId")
-    private String hospitalId;
-    @Column(name = "specialization_id")
-    private String specializationId;
-    @Column(name = "department_id")
-    private String departmentId;
+    @Column(name = "specialization_name")
+    private String specializationName;
 
     @OneToOne(optional = false)
     @JoinColumn(name = "user_id")
@@ -28,28 +24,13 @@ public class DoctorEntity {
         this.doctorId = doctorId;
     }
 
-    public String getHospitalId() {
-        return hospitalId;
+
+    public String getSpecializationName() {
+        return specializationName;
     }
 
-    public void setHospitalId(String hospitalId) {
-        this.hospitalId = hospitalId;
-    }
-
-    public String getSpecializationId() {
-        return specializationId;
-    }
-
-    public void setSpecializationId(String specializationId) {
-        this.specializationId = specializationId;
-    }
-
-    public String getDepartmentId() {
-        return departmentId;
-    }
-
-    public void setDepartmentId(String departmentId) {
-        this.departmentId = departmentId;
+    public void setSpecializationName(String specializationName) {
+        this.specializationName = specializationName;
     }
 
     public User getUser() {

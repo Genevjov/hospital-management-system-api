@@ -12,7 +12,6 @@ apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-apply plugin: 'war'
 
 bootJar {
     baseName = 'gs-spring-boot'
@@ -25,17 +24,9 @@ repositories {
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
-war {
-    enabled = true
-}
-
 
 dependencies {
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
-    compile("org.springframework.boot:spring-boot-starter-websocket") {
-        exclude module: "spring-boot-starter-tomcat"
-    }
-    providedCompile group: 'javax.servlet', name: 'javax.servlet-api', version: '3.0.1'
     compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.2.Final'
     compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.1.4.RELEASE'
     compile group: 'org.springframework.boot', name: 'spring-boot-configuration-processor', version: '2.1.4.RELEASE'
@@ -44,12 +35,8 @@ dependencies {
     compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
     compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.0.2'
     compile group: 'org.hibernate', name: 'hibernate-entitymanager', version: '5.4.1.Final'
-
-
+    compile group: 'com.google.guava', name: 'guava', version: '27.1-jre'
     testCompile("junit:junit")
-}
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.1.4.RELEASE'
 
-configurations {
-    compile.exclude module: 'spring-boot-starter-tomcat'
-    compile.exclude group: 'org.apache.tomcat'
 }

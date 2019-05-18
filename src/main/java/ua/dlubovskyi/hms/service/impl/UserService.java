@@ -39,4 +39,8 @@ public class UserService {
         }
         return null;
     }
+
+    public void createUser(User user) {
+        userRepository.save(user);
+    }
 }

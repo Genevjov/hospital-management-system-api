@@ -9,5 +9,5 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 public class NurseEntity   {
 
     private String departmentId;
-    private String hospitalId;
+
 }

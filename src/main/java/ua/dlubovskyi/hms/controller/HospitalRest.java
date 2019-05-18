@@ -9,45 +9,35 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 import ua.dlubovskyi.hms.dto.create.CreateHospitalDto;
 import ua.dlubovskyi.hms.entity.Hospital;
-import ua.dlubovskyi.hms.entity.Role;
-import ua.dlubovskyi.hms.entity.User;
 import ua.dlubovskyi.hms.service.TokenService;
 import ua.dlubovskyi.hms.service.impl.HospitalService;
-import ua.dlubovskyi.hms.service.impl.UserService;
-import ua.dlubovskyi.hms.util.RoleValidator;
+import ua.dlubovskyi.hms.util.SecurityUtils;
 
-import static java.util.Objects.nonNull;
+import static ua.dlubovskyi.hms.entity.Role.SERVICE_ADMIN;
 
 @RestController
 public class HospitalRest {
 
     private HospitalService hospitalService;
-    private TokenService tokenService;
-    private UserService userService;
     private ConversionService conversionService;
+    private SecurityUtils securityUtils;
+    private TokenService tokenService;
 
-
-    public HospitalRest(HospitalService hospitalService, TokenService tokenService, UserService userService, ConversionService conversionService) {
+    public HospitalRest(HospitalService hospitalService, ConversionService conversionService, SecurityUtils securityUtils, TokenService tokenService) {
         this.hospitalService = hospitalService;
-        this.tokenService = tokenService;
-        this.userService = userService;
         this.conversionService = conversionService;
+        this.securityUtils = securityUtils;
+        this.tokenService = tokenService;
     }
 
     @PutMapping("/hospitals")
     public ResponseEntity<Hospital> getAllHospitals(@RequestHeader("Auth") String authToken,
                                                     @RequestBody CreateHospitalDto createHospitalDto) {
-        if (tokenService.isTokenValid(authToken)) {
-            String userId = tokenService.getUserIdByToken(authToken);
-            if (nonNull(userId)) {
-                User user = userService.findById(userId);
-                if (nonNull(user) && RoleValidator.isRoleEqual(user, Role.HOSPITAL_ADMIN)) {
-                    Hospital newHospital = conversionService.convert(createHospitalDto, Hospital.class);
-                    hospitalService.addHospital(newHospital);
-                    tokenService.updateToken(userId);
-                    return new ResponseEntity<>(newHospital, HttpStatus.CREATED);
-                }
-            }
+        if (securityUtils.isActionGrated(authToken, SERVICE_ADMIN)) {
+            Hospital newHospital = conversionService.convert(createHospitalDto, Hospital.class);
+            hospitalService.addHospital(newHospital);
+            tokenService.updateToken(tokenService.getUserIdByToken(authToken));
+            return new ResponseEntity<>(newHospital, HttpStatus.CREATED);
         }
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }

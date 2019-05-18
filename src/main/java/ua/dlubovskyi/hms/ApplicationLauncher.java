@@ -12,10 +12,6 @@ import org.springframework.context.annotation.Import;
 public class ApplicationLauncher extends SpringBootServletInitializer {
 
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(ApplicationLauncher.class);
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(ApplicationLauncher.class, args);

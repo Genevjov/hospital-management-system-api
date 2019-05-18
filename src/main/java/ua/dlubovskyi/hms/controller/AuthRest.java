@@ -35,7 +35,6 @@ public class AuthRest {
         if (nonNull(user)) {
             AuthToken authToken = tokenService.generateAuthTokenForUser(user.getUserId());
             return new ResponseEntity<>(authToken, HttpStatus.OK);
-
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

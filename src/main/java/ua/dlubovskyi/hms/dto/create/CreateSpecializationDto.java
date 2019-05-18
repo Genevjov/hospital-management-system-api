@@ -1,17 +1,9 @@
 package ua.dlubovskyi.hms.dto.create;
 
-public class CreateDoctorDto {
+public class CreateSpecializationDto {
 
-    private CreateUserDto createUserDto;
     private String specializationName;
-
-    public void setCreateUserDto(CreateUserDto createUserDto) {
-        this.createUserDto = createUserDto;
-    }
-
-    public CreateUserDto getCreateUserDto() {
-        return createUserDto;
-    }
+    private String hospitalId;
 
     public String getSpecializationName() {
         return specializationName;
@@ -21,4 +13,11 @@ public class CreateDoctorDto {
         this.specializationName = specializationName;
     }
 
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
 }

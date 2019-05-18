@@ -1,5 +1,7 @@
 package ua.dlubovskyi.hms.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -21,12 +23,17 @@ public class User {
     private String phone;
     @Column(name = "email")
     private String email;
+    @JsonIgnore
     @Column(name = "password")
     private String password;
     @Column(name = "country_code")
     private String countryCode;
     @Column(name = "profile_type")
     private String profileType;
+    @Column(name = "hospital_id")
+    private String hospitalId;
+    @Column(name = "department_id")
+    private String departmentId;
 
     public String getUserId() {
         return userId;
@@ -92,6 +99,22 @@ public class User {
         this.profileType = profileType;
     }
 
+    public String getHospitalId() {
+        return hospitalId;
+    }
+
+    public void setHospitalId(String hospitalId) {
+        this.hospitalId = hospitalId;
+    }
+
+    public String getDepartmentId() {
+        return departmentId;
+    }
+
+    public void setDepartmentId(String departmentId) {
+        this.departmentId = departmentId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -104,11 +127,13 @@ public class User {
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(countryCode, user.countryCode) &&
-                Objects.equals(profileType, user.profileType);
+                Objects.equals(profileType, user.profileType) &&
+                Objects.equals(hospitalId, user.hospitalId) &&
+                Objects.equals(departmentId, user.departmentId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, firstName, secondName, phone, email, password, countryCode, profileType);
+        return Objects.hash(userId, firstName, secondName, phone, email, password, countryCode, profileType, hospitalId, departmentId);
     }
 }
