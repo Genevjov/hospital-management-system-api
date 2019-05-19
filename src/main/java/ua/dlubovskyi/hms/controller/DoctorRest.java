@@ -40,8 +40,8 @@ public class DoctorRest {
     }
 
     @PutMapping("/doctor")
-    public ResponseEntity<DoctorEntity> getAllDoctors(@RequestHeader("Auth") String authToken,
-                                                      @RequestBody CreateDoctorDto createDoctorDto) {
+    public ResponseEntity<DoctorEntity> createDoctor(@RequestHeader("Auth") String authToken,
+                                                     @RequestBody CreateDoctorDto createDoctorDto) {
         if (securityUtils.isActionGrated(authToken, SERVICE_ADMIN, Role.HOSPITAL_ADMIN)) {
             User newUser = conversionService.convert(createDoctorDto.getCreateUserDto(), User.class);
             DoctorEntity doctorEntity = conversionService.convert(createDoctorDto, DoctorEntity.class);

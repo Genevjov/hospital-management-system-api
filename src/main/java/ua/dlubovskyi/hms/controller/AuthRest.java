@@ -9,7 +9,7 @@ import ua.dlubovskyi.hms.dto.auth.AuthUserDto;
 import ua.dlubovskyi.hms.dto.auth.LogoutDto;
 import ua.dlubovskyi.hms.entity.AuthToken;
 import ua.dlubovskyi.hms.entity.User;
-import ua.dlubovskyi.hms.security.PasswordEncoder;
+import ua.dlubovskyi.hms.security.Encoder;
 import ua.dlubovskyi.hms.service.TokenService;
 import ua.dlubovskyi.hms.service.impl.UserService;
 
@@ -20,17 +20,17 @@ public class AuthRest {
 
     private final UserService userService;
     private TokenService tokenService;
-    private PasswordEncoder passwordEncoder;
+    private Encoder encoder;
 
-    public AuthRest(UserService userService, TokenService tokenService, PasswordEncoder passwordEncoder) {
+    public AuthRest(UserService userService, TokenService tokenService, Encoder encoder) {
         this.userService = userService;
         this.tokenService = tokenService;
-        this.passwordEncoder = passwordEncoder;
+        this.encoder = encoder;
     }
 
     @PostMapping("/auth")
     public ResponseEntity<AuthToken> authUser(@RequestBody AuthUserDto authUserDto) {
-        String encodedPassword = passwordEncoder.encode(authUserDto.getPassword());
+        String encodedPassword = encoder.encode(authUserDto.getPassword());
         User user = userService.findUserByEmailAndPass(authUserDto.getEmail(), encodedPassword);
         if (nonNull(user)) {
             AuthToken authToken = tokenService.generateAuthTokenForUser(user.getUserId());

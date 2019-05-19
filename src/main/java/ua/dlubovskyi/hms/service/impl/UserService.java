@@ -5,10 +5,8 @@ import ua.dlubovskyi.hms.entity.User;
 import ua.dlubovskyi.hms.repository.UserRepository;
 
 import javax.persistence.EntityManager;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -42,5 +40,15 @@ public class UserService {
 
     public void createUser(User user) {
         userRepository.save(user);
+    }
+
+    @Transactional
+    public void updateUserPassword(User userForUpdate) {
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaUpdate<User> criteriaUpdate = criteriaBuilder.createCriteriaUpdate(User.class);
+        Root root = criteriaUpdate.from(User.class);
+        criteriaUpdate.set("password", userForUpdate.getPassword());
+        criteriaUpdate.where(criteriaBuilder.equal(root.get("userId"), userForUpdate.getUserId()));
+        entityManager.createQuery(criteriaUpdate).executeUpdate();
     }
 }

@@ -8,7 +8,5 @@ import java.util.List;
 @Component
 public interface NurseService {
 
-    List<User> select();
-
 
 }
