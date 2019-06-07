@@ -9,6 +9,8 @@ import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+
 @Service
 public class UserService {
 
@@ -50,5 +52,9 @@ public class UserService {
         criteriaUpdate.set("password", userForUpdate.getPassword());
         criteriaUpdate.where(criteriaBuilder.equal(root.get("userId"), userForUpdate.getUserId()));
         entityManager.createQuery(criteriaUpdate).executeUpdate();
+    }
+
+    public List<User> findAll() {
+        return newArrayList(userRepository.findAll());
     }
 }

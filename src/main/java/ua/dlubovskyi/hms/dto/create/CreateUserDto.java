@@ -1,7 +1,8 @@
 package ua.dlubovskyi.hms.dto.create;
 
-public class CreateUserDto {
+import ua.dlubovskyi.hms.entity.Role;
 
+public class CreateUserDto {
     private String firstName;
     private String secondName;
     private String phone;
@@ -9,6 +10,24 @@ public class CreateUserDto {
     private String hospitalId;
     private String departmentId;
     private String countryCode;
+    private boolean generatePAss;
+    private Role userRole;
+
+    public boolean isGeneratePAss() {
+        return generatePAss;
+    }
+
+    public void setGeneratePAss(boolean generatePAss) {
+        this.generatePAss = generatePAss;
+    }
+
+    public Role getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(Role userRole) {
+        this.userRole = userRole;
+    }
 
     public String getFirstName() {
         return firstName;

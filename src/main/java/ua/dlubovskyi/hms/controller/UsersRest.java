@@ -1,16 +1,21 @@
 package ua.dlubovskyi.hms.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.dlubovskyi.hms.dto.change.ChangeEmailDto;
 import ua.dlubovskyi.hms.dto.change.ChangePasswordDto;
+import ua.dlubovskyi.hms.dto.create.CreateUserDto;
 import ua.dlubovskyi.hms.entity.Message;
+import ua.dlubovskyi.hms.entity.Role;
 import ua.dlubovskyi.hms.entity.User;
 import ua.dlubovskyi.hms.security.Encoder;
 import ua.dlubovskyi.hms.service.TokenService;
 import ua.dlubovskyi.hms.service.impl.UserService;
+import ua.dlubovskyi.hms.util.SecurityUtils;
+
+import java.util.List;
 
 import static java.util.Objects.nonNull;
 
@@ -20,19 +25,25 @@ public class UsersRest {
     private final UserService userService;
     private final TokenService tokenService;
     private final Encoder encoder;
+    private final SecurityUtils securityUtils;
+    private final ConversionService conversionService;
 
     @Autowired
-    public UsersRest(UserService userService, TokenService tokenService, Encoder encoder) {
+    public UsersRest(UserService userService, TokenService tokenService,
+                     Encoder encoder, SecurityUtils securityUtils, ConversionService conversionService) {
         this.userService = userService;
         this.tokenService = tokenService;
         this.encoder = encoder;
+        this.securityUtils = securityUtils;
+        this.conversionService = conversionService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/me")
     public ResponseEntity<User> getUserByToken(@RequestHeader("Auth") String authToken) {
         String id = tokenService.getUserIdByToken(authToken);
         if (nonNull(id)) {
             User user = userService.findById(id);
+            tokenService.updateToken(user.getUserId());
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -43,6 +54,7 @@ public class UsersRest {
                                                   @RequestBody ChangePasswordDto changePasswordDto) {
         String userId = tokenService.getUserIdByToken(authToken);
         if (nonNull(userId)) {
+            tokenService.updateToken(userId);
             User user = userService.findById(userId);
             String encodedOldPassword = encoder.encode(changePasswordDto.getOldPassword());
             Message message = new Message();
@@ -63,21 +75,34 @@ public class UsersRest {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    @PostMapping("/email/change")
-    public ResponseEntity<Message> changeEmail(@RequestHeader("Auth") String authToken,
-                                               @RequestBody ChangeEmailDto changeEmailDto) {
-        String userId = tokenService.getUserIdByToken(authToken);
-        if (nonNull(userId)) {
-            User user = userService.findById(userId);
-            Message message = new Message();
-            if (!user.getEmail().equals(changeEmailDto.getEmail())) {
-                userService.updateUserPassword(user);
-                return new ResponseEntity<>(HttpStatus.OK);
-            }
-            message.setText("Passwords are not equal.");
-            return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    @GetMapping("/users")
+    public ResponseEntity getAllUsers(@RequestHeader("Auth") String authToken) {
+        if (securityUtils.isActionGrated(authToken, Role.SERVICE_ADMIN)) {
+            tokenService.updateToken(tokenService.getUserIdByToken(authToken));
+            return new ResponseEntity<>(userService.findAll(), HttpStatus.OK);
         }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        return new ResponseEntity<List<User>>(HttpStatus.FORBIDDEN);
+    }
+
+    @GetMapping("/userProfile/{id}")
+    public ResponseEntity<User> getUserInfo(@RequestHeader("Auth") String authToken, @PathVariable("id") String id) {
+        User user = userService.findById(id);
+        tokenService.updateToken(tokenService.getUserIdByToken(authToken));
+        if (nonNull(user)) {
+            if (securityUtils.isGrantedToWatchProfile(authToken, user)) {
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @PutMapping("/user")
+    public ResponseEntity<User> addUser(@RequestHeader("Auth") String authToken, @RequestBody CreateUserDto createUserDto) {
+        if (securityUtils.isActionGrated(authToken, Role.SERVICE_ADMIN, Role.HOSPITAL_ADMIN)) {
+
+            userService.createUser(conversionService.convert(createUserDto, User.class));
+        }
+        return new ResponseEntity<>(conversionService.convert(createUserDto, User.class), HttpStatus.OK);
     }
 
 
